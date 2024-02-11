@@ -3,6 +3,7 @@ package test;
 import config.AndroidConfig;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
+import org.apache.commons.logging.Log;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -27,33 +28,32 @@ public class LoginTest {
 
     @Test(priority = 0)
     public void EmptyEmailInputTest(){
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.tabLogin)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.passwordInput)).sendKeys("Password123");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.loginButton)).click();
+        LoginPage.clickTabLogin(wait);
+        LoginPage.setupPassword(wait,"Password123");
+        LoginPage.clickLoginButton(wait);
 
         //validate empty email, when success login
-        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.msgInvalidEmail)).getText(), "Please enter a valid email address");
+        Assert.assertEquals(LoginPage.getInvalidEmailMessage(wait), "Please enter a valid email address");
     }
 
     @Test(priority = 1)
     public void EmptyPasswordInputTest(){
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.tabLogin)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.passwordInput)).sendKeys("");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.emailInput)).sendKeys("coba@gmail.com");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.loginButton)).click();
+        LoginPage.clickTabLogin(wait);
+        LoginPage.setupPassword(wait,"");
+        LoginPage.setupEmail(wait, "coba@gmail.com");
+        LoginPage.clickLoginButton(wait);
 
         //validate empty password, when success login
-        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.msgInvalidPassword)).getText(), "Please enter at least 8 characters");
+        Assert.assertEquals(LoginPage.getInvalidPasswordMessage(wait), "Please enter at least 8 characters");
     }
 
     @Test(priority = 2)
     public void InvalidEmailTest(){
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.tabLogin)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.emailInput)).sendKeys("");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.passwordInput)).sendKeys("");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.emailInput)).sendKeys("testing");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.passwordInput)).sendKeys("Password123");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.loginButton)).click();
+        LoginPage.clickTabLogin(wait);
+        LoginPage.cleanLoginInput(wait);
+        LoginPage.setupEmail(wait,"testing");
+        LoginPage.setupPassword(wait,"Password123");
+        LoginPage.clickLoginButton(wait);
 
         //validate message invalid email, when success login
         Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.msgInvalidEmail)).getText(), "Please enter a valid email address");
@@ -61,12 +61,11 @@ public class LoginTest {
 
     @Test(priority = 3)
     public void InvalidPasswordTest(){
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.tabLogin)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.emailInput)).sendKeys("");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.passwordInput)).sendKeys("");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.emailInput)).sendKeys("testing@gmail.com");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.passwordInput)).sendKeys("test");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.loginButton)).click();
+        LoginPage.clickTabLogin(wait);
+        LoginPage.cleanLoginInput(wait);
+        LoginPage.setupEmail(wait,"testing@gmail.com");
+        LoginPage.setupPassword(wait,"test");
+        LoginPage.clickLoginButton(wait);
 
         //validate message invalid password, when success login
         Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.msgInvalidPassword)).getText(), "Please enter at least 8 characters");
@@ -74,16 +73,16 @@ public class LoginTest {
 
     @Test(priority = 4)
     public void SuccessfullyLoginTest(){
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.emailInput)).sendKeys("");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.tabLogin)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.emailInput)).sendKeys("coba@gmail.com");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.passwordInput)).sendKeys("Password123");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.loginButton)).click();
+        LoginPage.clickTabLogin(wait);
+        LoginPage.cleanLoginInput(wait);
+        LoginPage.setupEmail(wait,"coba@gmail.com");
+        LoginPage.setupPassword(wait,"Password123");
+        LoginPage.clickLoginButton(wait);
 
         //validate popup dialog, when success login
-        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.titleSuccessLogin)).getText(), "Success");
-        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.descSuccessLogin)).getText(), "You are logged in!");
-        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.okPopup)).getText(), "OK");
+        Assert.assertEquals(LoginPage.getTitleLoginPopup(wait), "Success");
+        Assert.assertEquals(LoginPage.getDescLoginPopup(wait), "You are logged in!");
+        Assert.assertEquals(LoginPage.getOkButtonLoginPopup(wait), "OK");
     }
 
     /*
