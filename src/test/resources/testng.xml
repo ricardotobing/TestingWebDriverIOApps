@@ -1,0 +1,7 @@
+<suite name="HelloTestNgSuite">
+    <test name="HelloWorldTest" preserve-order="true" thread-count="10" parallel="methods">
+        <classes>
+            <class name="test.LoginTest"/>
+        </classes>
+    </test>
+</suite>
