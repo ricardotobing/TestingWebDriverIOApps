@@ -11,5 +11,5 @@ Before running the test case script we must run Appium Server
 - for see the list of device could be seen with command adb
 ```adb devices``` and setup the device in ```AndroidConfig``` class
 ![](screenshoot/adb.png)
-# for demo login the page could be seein in this link
-![Android Login with input](https://drive.google.com/file/d/1qTv3WDfrzjD9M5s_JmZTRyZXftaLZTm-/view?usp=sharing)
+# for demo login page using input email and password
+![Android Login with input](https://drive.google.com/file/d/1qTv3WDfrzjD9M5s_JmZTRyZXftaLZTm-/view)
