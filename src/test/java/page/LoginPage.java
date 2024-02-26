@@ -62,4 +62,8 @@ public class LoginPage {
     public static String getOkButtonLoginPopup(WebDriverWait wait) {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.okPopup)).getText();
     }
+
+    public static void clickFingerPrint(WebDriverWait wait){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.loginByFingerPrint)).click();
+    }
 }

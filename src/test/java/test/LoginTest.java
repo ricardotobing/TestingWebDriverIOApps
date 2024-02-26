@@ -12,6 +12,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import page.LoginPage;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -72,12 +75,15 @@ public class LoginTest {
     }
 
     @Test(priority = 4)
-    public void SuccessfullyLoginTest(){
+    public void SuccessfullyLoginByFingerPrint() throws InterruptedException {
         LoginPage.clickTabLogin(wait);
         LoginPage.cleanLoginInput(wait);
-        LoginPage.setupEmail(wait,"coba@gmail.com");
-        LoginPage.setupPassword(wait,"Password123");
-        LoginPage.clickLoginButton(wait);
+        LoginPage.clickFingerPrint(wait);
+        for (int i = 1; i <= 3; i++)
+        {
+            Thread.sleep(5000);
+            executeProcess("adb -e emu finger touch 1");
+        }
 
         //validate popup dialog, when success login
         Assert.assertEquals(LoginPage.getTitleLoginPopup(wait), "Success");
@@ -85,23 +91,10 @@ public class LoginTest {
         Assert.assertEquals(LoginPage.getOkButtonLoginPopup(wait), "OK");
     }
 
-    /*
-    @Test(priority = 10)
-    public void successfullyLoginWithFingerPrint() throws InterruptedException {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(tabLogin)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(loginByFingerPrint)).click();
-        for (int i = 1; i <= 3; i++)
-        {
-            Thread.sleep(5000);
-            executeProcess("adb -e emu finger touch 1");
-        }
-    }
-
     private void executeProcess(String cmd){
         ProcessBuilder processBuilder = new ProcessBuilder();
 
         // Run a shell command
-        //processBuilder.command(cmd);
         processBuilder.command("bash", "-c", cmd);
 
         // Run a shell script
@@ -112,9 +105,13 @@ public class LoginTest {
         // Run a command
         //processBuilder.command("cmd.exe", "/c", cmd);
 
+
         try {
+
             Process process = processBuilder.start();
+
             StringBuilder output = new StringBuilder();
+
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()));
 
@@ -128,7 +125,7 @@ public class LoginTest {
 
             String eline;
             while ((eline = ereader.readLine()) != null) {
-                output.append(eline + "");
+                output.append(eline + " ");
             }
 
             int exitCode = process.waitFor();
@@ -147,7 +144,22 @@ public class LoginTest {
             e.printStackTrace();
         }
     }
-     */
+
+
+
+@Test(priority = 5)
+    public void SuccessfullyLoginTest(){
+        LoginPage.clickTabLogin(wait);
+        LoginPage.cleanLoginInput(wait);
+        LoginPage.setupEmail(wait,"coba@gmail.com");
+        LoginPage.setupPassword(wait,"Password123");
+        LoginPage.clickLoginButton(wait);
+
+        //validate popup dialog, when success login
+        Assert.assertEquals(LoginPage.getTitleLoginPopup(wait), "Success");
+        Assert.assertEquals(LoginPage.getDescLoginPopup(wait), "You are logged in!");
+        Assert.assertEquals(LoginPage.getOkButtonLoginPopup(wait), "OK");
+    }
 
     @AfterClass
     public void dispatchConfig(){

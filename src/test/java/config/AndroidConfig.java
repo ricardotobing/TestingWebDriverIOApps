@@ -10,7 +10,7 @@ public class AndroidConfig {
     private static boolean ANDROID_RESET_CONFIG = false;
 
     //please change the android device id and platform version of android
-    private static String  ANDROID_DEVICE_ID = "RR8R801GPNZ";
+    private static String  ANDROID_DEVICE_ID = "emulator-5554";
     private static String  ANDROID_PLATFORM_VERSION = "13.0";
 
     public static DesiredCapabilities setupAndroidConnection(){
